@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0a0a0a;
+  --color-red: #b8191b;
+  --color-red-dark: #8f1214;
+  --color-red-soft: #e8686a;
+  --color-cream: #f6f3ef;
+  --color-body: #4a4a4a;
+  --color-muted: #6b6b6b;
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-serif: var(--font-merriweather), Georgia, serif;
+
+  --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-panel: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --animate-k-in: k-in 0.8s var(--ease-out-soft) both;
+  --animate-k-slide: k-slide 0.7s var(--ease-panel) both;
+  --animate-k-fade: k-fade 0.45s ease both;
+  --animate-k-pop: k-pop 0.7s var(--ease-out-soft) 1.4s both;
+  --animate-k-float: k-float 8s ease-in-out infinite;
+  --animate-k-pulse: k-pulse 2.4s ease-out infinite;
+  --animate-k-scroll: k-scroll 1.8s ease-in-out infinite;
+
+  @keyframes k-in {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes k-slide {
+    from { transform: translateX(100%); }
+    to { transform: none; }
+  }
+  @keyframes k-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes k-pop {
+    from { opacity: 0; transform: scale(0.6); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes k-float {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -18px; }
+  }
+  @keyframes k-pulse {
+    0% { transform: scale(1); opacity: 0.55; }
+    100% { transform: scale(1.7); opacity: 0; }
+  }
+  @keyframes k-scroll {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(200%); }
+  }
+  @keyframes k-draw {
+    to { stroke-dashoffset: 0; }
+  }
+}
+
+/* Vetvička - kreslenie čiary (cesty majú pathLength="1") */
+@utility k-draw {
+  & .k-line {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: k-draw 1.4s cubic-bezier(0.45, 0, 0.25, 1) 0.2s forwards;
+  }
+  /* Lístok rastie zo stopky (bod 0 0 v jeho súradniciach). */
+  & .k-leaf {
+    transform-origin: 0 0;
+    animation: k-leaf 0.55s cubic-bezier(0.2, 0.7, 0.2, 1.25) both;
+  }
+}
+
+@keyframes k-leaf {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+/* Podčiarknutie telefónu: nakreslí sa pri zobrazení, pri hover sa nakreslí znova */
+@utility k-underline {
+  & path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  &.is-in path {
+    animation: k-draw 1.1s cubic-bezier(0.6, 0, 0.2, 1) 0.15s forwards;
+  }
+  .group:hover &.is-in path {
+    animation: k-redraw 0.8s cubic-bezier(0.6, 0, 0.2, 1) forwards;
+  }
+}
+
+@keyframes k-redraw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-white font-sans text-ink;
+  }
+  a {
+    @apply text-ink transition-colors hover:text-red;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  .k-draw .k-line,
+  .k-underline path {
+    stroke-dashoffset: 0;
+  }
+  .k-draw .k-leaf {
+    transform: none;
+  }
+}
