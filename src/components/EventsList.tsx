@@ -2,9 +2,13 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
+import { motion } from "motion/react";
 import { events } from "@/lib/data";
 
-/** Zoznam typov akcií. Pri hover sa pri kurzore ukáže fotka z danej akcie. */
+/**
+ * Zoznam typov akcií. Na počítači sa pri hover ukáže fotka pri kurzore,
+ * na mobile a tablete je fotka priamo pod textom.
+ */
 export default function EventsList() {
   const [active, setActive] = useState<number | null>(null);
   const listRef = useRef<HTMLOListElement>(null);
@@ -26,16 +30,23 @@ export default function EventsList() {
       className="relative m-0 list-none border-b border-ink/12 p-0"
     >
       {events.map((e, i) => (
-        <li
+        <motion.li
           key={e.title}
           onMouseEnter={() => setActive(i)}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "0px 0px -10% 0px" }}
+          transition={{ duration: 0.7, delay: i * 0.08, ease: [0.2, 0.7, 0.2, 1] }}
           className="group grid gap-x-[clamp(16px,3vw,48px)] gap-y-2 border-t border-ink/12 py-[clamp(22px,3vw,36px)] md:grid-cols-2 md:items-center"
         >
           <h3 className="m-0 font-serif text-[clamp(26px,3.4vw,48px)] font-black uppercase leading-[1.05] transition-[color,translate] duration-400 ease-out-soft group-hover:translate-x-3 group-hover:text-red">
             {e.title}
           </h3>
           <p className="m-0 max-w-[460px] text-base leading-[1.6] text-body">{e.text}</p>
-        </li>
+          <div className="relative mt-3 aspect-[16/10] overflow-hidden rounded-[18px] md:hidden">
+            <Image src={e.photo} alt={e.alt} fill sizes="100vw" className="object-cover" />
+          </div>
+        </motion.li>
       ))}
 
       {/* Plávajúca fotka – iba pre myš, na dotykových zariadeniach sa nezobrazí. */}

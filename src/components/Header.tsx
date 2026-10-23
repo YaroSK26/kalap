@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useLenis } from "lenis/react";
 import { Branch, Icon } from "./ui";
 import { icons, menuItems, PHONE, PHONE_HREF, socials } from "@/lib/data";
 
@@ -8,6 +10,11 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const close = () => setOpen(false);
+  const lenis = useLenis();
+  // Mimo úvodnej stránky (napr. 404) vedú odkazy na sekcie späť na úvod.
+  const base = usePathname() === "/" ? "" : "/";
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
 
   // Úplne hore je navbar bez pozadia, po scrollovaní dostane pozadie.
   useEffect(() => {
@@ -17,30 +24,70 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Otvorené menu: stránka sa nescrolluje, fokus ide na prvý odkaz a Tab ostáva v menu.
+  // Po zatvorení sa fokus vráti na tlačidlo Menu.
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    lenis?.stop();
+    const button = menuButtonRef.current;
+    const focusables = () =>
+      [
+        button,
+        ...(panelRef.current?.querySelectorAll<HTMLElement>("a[href]") ?? []),
+      ].filter(Boolean) as HTMLElement[];
+    focusables()[1]?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+      if (e.key !== "Tab") return;
+      const items = focusables();
+      const i = items.indexOf(document.activeElement as HTMLElement);
+      const next = e.shiftKey
+        ? i <= 0
+          ? items.length - 1
+          : i - 1
+        : (i + 1) % items.length;
+      e.preventDefault();
+      items[next].focus();
+    };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      lenis?.start();
+      button?.focus();
+    };
+  }, [open, lenis]);
 
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-60 px-[clamp(12px,2vw,24px)] transition-[padding] duration-300 ${scrolled ? "pt-1.5" : "pt-4"}`}
+        className={`fixed inset-x-0 top-0 z-60 px-3 transition-[padding] duration-300 ${scrolled ? "pt-1.5" : "pt-3"}`}
       >
         <nav
           aria-label="Hlavná navigácia"
-          className={`mx-auto grid max-w-[1320px] grid-cols-[1fr_auto] items-center gap-3 rounded-full py-2.5 pr-2.5 pl-5 transition-[background-color,box-shadow] duration-300 md:grid-cols-[1fr_auto_1fr] ${
-            scrolled || open
+          className={`grid w-full grid-cols-[1fr_auto] items-center gap-3 rounded-full py-2 pr-[clamp(8px,1.6vw,20px)] pl-[clamp(14px,2.6vw,36px)] transition-[background-color,box-shadow] duration-300 md:grid-cols-[1fr_auto_1fr] ${
+            scrolled && !open
               ? "bg-ink/90 shadow-[0_10px_34px_rgba(10,10,10,0.25),0_0_0_1px_rgba(255,255,255,0.08)] backdrop-blur-[14px]"
               : "bg-transparent"
           }`}
         >
-          <a href="#top" aria-label="KALAP - na začiatok" className="flex w-fit items-center no-underline">
-            <img src="/img/logo.png" alt="KALAP" className="block h-[clamp(52px,6vw,68px)] w-auto object-contain" />
+          <a
+            href={`${base}#top`}
+            aria-label="KALAP - na začiatok"
+            className={`flex w-fit items-center no-underline ${open ? "max-sm:invisible" : ""}`}
+          >
+            {/* Hore na stránke je logo väčšie. Zväčšuje sa cez scale, takže ostatné prvky navbaru sa nehýbu. */}
+            <img
+              src="/img/logo.png"
+              alt="KALAP"
+              className={`block h-[clamp(54px,7vw,86px)] w-auto origin-top-left object-contain transition-transform duration-400 ease-out ${
+                scrolled ? "scale-100" : "scale-[1.3] md:scale-[1.6]"
+              }`}
+            />
           </a>
-          <div className="flex items-center gap-1.5 max-md:hidden">
+          <div
+            className={`flex items-center gap-1.5 transition-opacity duration-300 max-md:hidden ${open ? "invisible opacity-0" : ""}`}
+          >
             {socials.map((s) => (
               <a
                 key={s.label}
@@ -56,22 +103,23 @@ export default function Header() {
           </div>
           <div className="flex items-center justify-end gap-2">
             <a
-              href="#merch"
-              className="flex h-14 items-center gap-2.5 whitespace-nowrap rounded-full bg-red pr-1.5 pl-[18px] text-[15px] font-semibold text-white no-underline transition duration-250 hover:-translate-y-0.5 hover:bg-red-dark hover:text-white"
+              href={`${base}#merch`}
+              className={`flex h-[clamp(48px,5vw,64px)] items-center gap-3 whitespace-nowrap rounded-full pr-2 pl-[clamp(16px,1.8vw,24px)] text-[clamp(15px,1.3vw,17px)] font-semibold text-white no-underline transition duration-250 hover:-translate-y-0.5 hover:text-white ${open ? "bg-ink hover:bg-ink/80" : "bg-red hover:bg-red-dark"}`}
             >
               <span>E-shop</span>
-              <span className="grid size-[34px] place-items-center rounded-full bg-white text-red">
-                <Icon d={icons.arrowUR} size={16} stroke={2} />
+              <span className="grid size-[clamp(36px,3.4vw,44px)] place-items-center rounded-full bg-white text-red">
+                <Icon d={icons.arrowUR} size={18} stroke={2} />
               </span>
             </a>
             <button
+              ref={menuButtonRef}
               type="button"
               onClick={() => setOpen(!open)}
               aria-expanded={open}
               aria-controls="k-menu"
-              className="flex h-14 cursor-pointer items-center gap-2.5 whitespace-nowrap rounded-full border-0 bg-white pr-5 pl-4 text-[15px] font-semibold text-ink transition duration-250 hover:-translate-y-0.5 hover:bg-cream"
+              className="flex h-[clamp(48px,5vw,64px)] cursor-pointer items-center gap-2.5 whitespace-nowrap rounded-full border-0 bg-white pr-[clamp(18px,1.8vw,26px)] pl-[clamp(14px,1.5vw,20px)] text-[clamp(15px,1.3vw,17px)] font-semibold text-ink transition duration-250 hover:-translate-y-0.5 hover:bg-cream"
             >
-              <Icon d={open ? icons.x : icons.list} stroke={2} />
+              <Icon d={open ? icons.x : icons.list} size={22} stroke={2} />
               <span>{open ? "Zavrieť" : "Menu"}</span>
             </button>
           </div>
@@ -80,12 +128,20 @@ export default function Header() {
 
       {open && (
         <>
-          <div onClick={close} aria-hidden="true" className="fixed inset-0 z-40 animate-k-fade bg-ink/45 backdrop-blur-sm" />
-          {/* Panel sa musí zmestiť na výšku obrazovky - veľkosti sa riadia aj podľa vh. */}
+          <div
+            onClick={close}
+            aria-hidden="true"
+            className="fixed inset-0 z-40 animate-k-fade bg-ink/60 backdrop-blur-sm"
+          />
+          {/* Panel začína pod navbarom. Keď sa nezmestí na výšku, dá sa v ňom scrollovať. */}
           <aside
+            ref={panelRef}
             id="k-menu"
+            role="dialog"
+            aria-modal="true"
             aria-label="Menu"
-            className="fixed inset-y-0 right-0 z-50 flex h-svh w-[78%] min-w-[min(100%,440px)] animate-k-slide flex-col justify-between gap-[clamp(16px,3vh,32px)] overflow-hidden bg-red px-[clamp(24px,5vw,80px)] pt-[clamp(84px,12vh,112px)] pb-[clamp(20px,4vh,48px)] text-white"
+            data-lenis-prevent
+            className="fixed inset-y-0 right-0 z-50 flex h-svh w-full animate-k-slide flex-col justify-between gap-[clamp(16px,3vh,32px)] overflow-x-hidden overflow-y-auto bg-red px-[clamp(24px,5vw,80px)] pt-[clamp(112px,16vh,150px)] pb-[clamp(20px,4vh,48px)] text-white sm:w-[78%] sm:min-w-[440px]"
           >
             <Branch
               color="#FFFFFF"
@@ -95,12 +151,14 @@ export default function Header() {
               {menuItems.map((m) => (
                 <a
                   key={m.href}
-                  href={m.href}
+                  href={base + m.href}
                   onClick={close}
                   style={{ animationDelay: m.delay }}
                   className="group flex animate-k-in items-center gap-[clamp(12px,2vw,24px)] border-b border-white/28 py-[clamp(6px,1.4vh,14px)] text-white no-underline transition-transform duration-400 ease-out-soft hover:translate-x-3.5 hover:text-white"
                 >
-                  <span className="min-w-7 text-[13px] font-semibold tracking-[0.08em] opacity-75">{m.n}</span>
+                  <span className="min-w-7 text-[13px] font-semibold tracking-[0.08em] opacity-75">
+                    {m.n}
+                  </span>
                   <svg
                     viewBox="0 0 60 60"
                     aria-hidden="true"
@@ -125,7 +183,9 @@ export default function Header() {
             </nav>
             <div className="relative flex flex-wrap items-end justify-between gap-4">
               <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold uppercase tracking-[0.14em] opacity-80">Kontakt</span>
+                <span className="text-xs font-semibold uppercase tracking-[0.14em] opacity-80">
+                  Kontakt
+                </span>
                 <a
                   href={PHONE_HREF}
                   className="font-serif text-[clamp(22px,min(2.6vw,4vh),34px)] font-black text-white no-underline transition-colors duration-300 hover:text-ink"

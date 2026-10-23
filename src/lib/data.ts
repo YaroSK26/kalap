@@ -34,6 +34,12 @@ export const socials = [
   { label: "TikTok", href: LINKS.tiktok, d: icons.tt },
 ];
 
+export const legalPages = [
+  { label: "Ochrana osobných údajov (GDPR)", href: "/ochrana-osobnych-udajov" },
+  { label: "Zásady používania cookies", href: "/cookies" },
+  { label: "Obchodné podmienky", href: "/obchodne-podmienky" },
+];
+
 export const menuItems = [
   { n: "01", label: "O nás", href: "#o-nas", delay: "0.15s" },
   { n: "02", label: "Čo robíme", href: "#co-robime", delay: "0.22s" },
@@ -50,7 +56,7 @@ export const members = [
     img: "/img/david.jpg",
     alt: "Dávid s husľami",
     pos: "45% 30%",
-    text: "Husle sú hlasom kapely. Dávid vedie melódiu od pomalých piesní až po rýchle čardáše - a na pódiu ho spoznáte podľa klobúka.",
+    text: "Husle sú hlasom kapely. Dávid vedie melódiu od pomalých piesní až po rýchle čardáše.",
   },
   {
     name: "Oliver",
@@ -78,90 +84,94 @@ export const members = [
   },
 ];
 
-// `photo` sa ukáže pri hover nad riadkom.
+// `photo` sa na počítači ukáže pri hover nad riadkom, na mobile je pod textom.
 export const events = [
   {
     title: "Svadby",
     text: "Od čepčenia po ranné rozlúčky - ľudovka, pri ktorej tancujú všetky generácie.",
     photo: "/img/foto3.jpg",
+    alt: "KALAP s novomanželmi na svadbe",
   },
   {
     title: "Plesy",
     text: "Slávnostná atmosféra, plný parket a program presne podľa organizátora.",
     photo: "/img/foto6.jpg",
+    alt: "KALAP hrá na pódiu",
   },
   {
     title: "Oslavy",
     text: "Narodeniny, jubileá aj rodinné stretnutia - v sále, v záhrade či na dvore.",
     photo: "/img/foto4.jpg",
+    alt: "KALAP na oslave narodenín",
   },
   {
     title: "Firemné akcie",
-    text: "Večierky, teambuildingy aj firemné behy. Kolegov roztancujeme aj po cieli.",
+    text: "Večierky, teambuildingy aj behy. Ľudí roztancujeme kdekoľvek.",
     photo: "/img/foto5.jpg",
+    alt: "KALAP hrá bežcom na behu",
   },
   {
     title: "Festivaly a dni obcí",
     text: "Pódiá pod holým nebom a námestia plné ľudí - tam sa cítime ako doma.",
     photo: "/img/foto1.jpg",
+    alt: "KALAP medzi hosťami pod holým nebom",
   },
 ];
 
+// `icon` = kľúč ikony v sekcii Merch.
 export const merch = [
   {
     name: "Tričko",
-    d: "M8 3L3 6l2 4 2.5-1V21h9V9l2.5 1 2-4-5-3c-.5 1.5-2 2.5-4 2.5S8.5 4.5 8 3z",
+    icon: "tshirt",
     bg: "#F6F3EF",
     fg: "#0A0A0A",
     orn: 0.9,
   },
   {
     name: "Mikina",
-    d: "M8 4L3 7l1 13h4V11M16 4l5 3-1 13h-4V11M8 4c1 2 2.4 3 4 3s3-1 4-3M8 4v17h8V4M10 15h4",
+    icon: "hoodie",
     bg: "#0A0A0A",
     fg: "#FFFFFF",
     orn: 0.9,
   },
   {
     name: "Šiltovka",
-    d: "M3.5 15.5c0-4.7 3.8-8.5 8.5-8.5s8.5 3.8 8.5 8.5zM12 7V5.5M3.5 15.5H21c0 1.4-1.8 2.5-4.5 2.5",
+    icon: "cap",
     bg: "#B8191B",
     fg: "#FFFFFF",
     orn: 0.25,
   },
   {
     name: "Taška",
-    d: "M5 9h14l-1.2 12H6.2zM9 9V6a3 3 0 0 1 6 0v3",
+    icon: "tote",
     bg: "#F6F3EF",
     fg: "#0A0A0A",
     orn: 0.9,
   },
   {
     name: "Klobúk",
-    d: "M2.5 16.5c0-1.7 4.3-3 9.5-3s9.5 1.3 9.5 3-4.3 3-9.5 3-9.5-1.3-9.5-3zM6.5 14.3V9.8C6.5 7.7 9 6 12 6s5.5 1.7 5.5 3.8v4.5M6.5 12h11",
+    icon: "hat",
     bg: "#0A0A0A",
     fg: "#FFFFFF",
     orn: 0.9,
   },
   {
     name: "Hrnček",
-    d: "M5 8h11v8.5a3.5 3.5 0 0 1-3.5 3.5h-4A3.5 3.5 0 0 1 5 16.5zM16 10h1.5a2.5 2.5 0 0 1 0 5H16M8.5 3.5v2M11.5 3v2.5M14.5 3.5v2",
+    icon: "mug",
     bg: "#B8191B",
     fg: "#FFFFFF",
     orn: 0.25,
   },
-];
+] as const;
 
 /**
- * Fotky v sekcii „Sme všade“. Prichádzajú postupne pri scrollovaní:
+ * Fotky v sekcii „Sme všade“ – dve vľavo, dve vpravo. Prichádzajú postupne pri scrollovaní:
  * `from` = odkiaľ priletia (vw / vh), `start` = kedy (0 až 1 z dĺžky sekcie).
  * Horné fotky začínajú pod navbarom, aby bolo vidno tváre.
  */
 export const floatingPhotos = [
   { src: "/img/foto2.jpg", alt: "Pred vystúpením", className: "left-[3%] top-[max(108px,14%)] w-[38%] md:w-[19%] aspect-square -rotate-4", from: [-70, 0], start: 0, front: false },
-  { src: "/img/foto6.jpg", alt: "Na pódiu", className: "right-[4%] bottom-[5%] w-[46%] md:w-[22%] aspect-[4/3] -rotate-3", from: [0, 80], start: 0.13, front: true },
-  { src: "/img/foto3.jpg", alt: "S novomanželmi na svadbe", className: "right-[4%] top-[max(108px,14%)] w-[32%] md:w-[15%] aspect-[4/5] rotate-3", from: [70, 0], start: 0.26, front: false },
-  { src: "/img/foto1.jpg", alt: "S hosťami v záhrade", className: "left-[6%] bottom-[5%] w-[40%] md:w-[17%] aspect-square rotate-4", from: [0, 80], start: 0.39, front: true },
-  { src: "/img/foto4.jpg", alt: "Na oslave 30. narodenín", className: "left-[38%] top-[max(104px,12%)] w-[24%] md:w-[10%] aspect-[3/4] rotate-2", from: [0, -70], start: 0.52, front: false },
-  { src: "/img/foto5.jpg", alt: "Na firemnom behu", className: "right-[34%] bottom-[3%] w-[30%] md:w-[15%] aspect-[4/3] -rotate-2", from: [0, 80], start: 0.65, front: false },
+  { src: "/img/foto6.jpg", alt: "Na pódiu", className: "right-[4%] bottom-[5%] w-[46%] md:w-[22%] aspect-[4/3] -rotate-3", from: [0, 80], start: 0.17, front: true },
+  { src: "/img/foto3.jpg", alt: "S novomanželmi na svadbe", className: "right-[4%] top-[max(108px,14%)] w-[32%] md:w-[15%] aspect-[4/5] rotate-3", from: [70, 0], start: 0.34, front: false },
+  { src: "/img/foto1.jpg", alt: "S hosťami v záhrade", className: "left-[6%] bottom-[5%] w-[40%] md:w-[17%] aspect-square rotate-4", from: [0, 80], start: 0.51, front: true },
 ] as const;

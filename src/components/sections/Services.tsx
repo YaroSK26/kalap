@@ -1,11 +1,13 @@
 import { Container, Eyebrow, Flower, Icon, SectionTitle } from "../ui";
 import EventsList from "../EventsList";
+import EdgeOrnament from "../EdgeOrnament";
 import { icons, PHONE, PHONE_HREF } from "@/lib/data";
 
 export default function Services() {
   return (
-    <section id="co-robime" className="py-[clamp(72px,10vw,140px)]">
-      <Container className="flex flex-col gap-[clamp(40px,6vw,72px)]">
+    <section id="co-robime" className="relative overflow-x-clip py-[clamp(72px,10vw,140px)]">
+      <EdgeOrnament className="top-[clamp(24px,4vw,64px)]" />
+      <Container className="relative z-1 flex flex-col gap-[clamp(40px,6vw,72px)]">
         <div className="flex flex-wrap items-end justify-between gap-8">
           <div className="flex flex-col gap-[18px]">
             <Eyebrow>Čo robíme</Eyebrow>
@@ -16,7 +18,7 @@ export default function Services() {
             </SectionTitle>
           </div>
           <p className="m-0 max-w-[360px] text-lg leading-[1.65] text-body">
-            Malá svadba aj veľké námestie. Program aj repertoár vždy pripravíme podľa vás.
+            Malá svadba aj veľké námestie. Všade hráme naplno - od prvej piesne až do rána.
           </p>
         </div>
 
@@ -25,7 +27,7 @@ export default function Services() {
         <div className="flex items-center justify-center gap-[clamp(12px,2vw,24px)] text-center">
           <Flower className="size-6 flex-none" />
           <p className="m-0 font-serif text-[clamp(18px,1.9vw,26px)] font-bold italic leading-[1.4] md:whitespace-nowrap">
-            Repertoár prispôsobíme vašej akcii - od ľudoviek po známe hity.
+            Kde hrá KALAP, tam sa tancuje.
           </p>
           <Flower className="size-6 flex-none" />
         </div>

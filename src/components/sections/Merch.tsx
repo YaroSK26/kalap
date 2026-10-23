@@ -1,8 +1,18 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Container, Eyebrow, Icon, SectionTitle } from "../ui";
+import { BaseballCap, Coffee, CowboyHat, Hoodie, Tote, TShirt } from "@phosphor-icons/react";
+import { Container, Eyebrow, SectionTitle } from "../ui";
 import { merch } from "@/lib/data";
+
+const merchIcons = {
+  tshirt: TShirt,
+  hoodie: Hoodie,
+  cap: BaseballCap,
+  tote: Tote,
+  hat: CowboyHat,
+  mug: Coffee,
+};
 
 /**
  * Sekcia sa „zastaví“ a produkty sa posúvajú do strany podľa scrollu stránky.
@@ -65,36 +75,36 @@ export default function Merch() {
           ref={trackRef}
           className="flex w-max gap-[clamp(14px,2vw,24px)] px-[max(clamp(16px,4vw,48px),calc((100vw-1184px)/2))] will-change-transform"
         >
-          {merch.map((p) => (
-            <article
-              key={p.name}
-              className="flex w-[min(clamp(260px,30vw,400px),calc((100svh-340px)*0.8))] min-w-[220px] flex-col gap-4"
-            >
-              <div
-                className="relative grid aspect-[4/5] place-items-center overflow-hidden rounded-[22px]"
-                style={{ background: p.bg }}
+          {merch.map((p) => {
+            const ProductIcon = merchIcons[p.icon];
+            return (
+              <article
+                key={p.name}
+                className="flex w-[min(clamp(260px,30vw,400px),calc((100svh-340px)*0.8))] min-w-[220px] flex-col gap-4"
               >
-                <img
-                  src="/svg/flower-big.svg"
-                  alt=""
-                  aria-hidden="true"
-                  className="absolute -right-[18%] -bottom-[14%] w-[62%]"
-                  style={{ opacity: p.orn }}
-                />
-                <Icon d={p.d} size="38%" stroke={0.9} color={p.fg} className="relative" />
-                <span className="absolute top-4 left-4 rounded-full bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-[0.12em] text-red">
-                  Čoskoro
-                </span>
-                <span className="absolute bottom-4 left-4 text-xs opacity-70" style={{ color: p.fg }}>
-                  [Fotka produktu - lookbook]
-                </span>
-              </div>
-              <div className="flex items-baseline justify-between gap-3">
-                <h3 className="m-0 font-serif text-[22px] font-black uppercase">{p.name}</h3>
-                <span className="text-[15px] text-muted">[cena]</span>
-              </div>
-            </article>
-          ))}
+                <div
+                  className="relative grid aspect-[4/5] place-items-center overflow-hidden rounded-[22px]"
+                  style={{ background: p.bg }}
+                >
+                  <img
+                    src="/svg/flower-big.svg"
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute -right-[18%] -bottom-[14%] w-[62%]"
+                    style={{ opacity: p.orn }}
+                  />
+                  <ProductIcon aria-hidden="true" weight="light" color={p.fg} className="relative size-[42%]" />
+                  <span className="absolute top-4 left-4 rounded-full bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-[0.12em] text-red">
+                    Čoskoro
+                  </span>
+                </div>
+                <div className="flex items-baseline justify-between gap-3">
+                  <h3 className="m-0 font-serif text-[22px] font-black uppercase">{p.name}</h3>
+                  <span className="text-[15px] text-muted">[cena]</span>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

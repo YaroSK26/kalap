@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <div className="relative min-h-full w-full overflow-x-clip">
       <Header />
-      <main>
+      <main id="obsah">
         <Hero />
         <About />
         <Services />

@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
+import { Reveal } from "./Reveal";
 
 type IconProps = {
   d: string;
@@ -39,10 +40,10 @@ export function Flower({ className = "size-5" }: { className?: string }) {
 /** Štítok sekcie s kvetom, napr. „O nás“. */
 export function Eyebrow({ children, className = "text-red" }: { children: ReactNode; className?: string }) {
   return (
-    <div className={`flex items-center gap-2.5 text-[13px] font-bold uppercase tracking-[0.16em] ${className}`}>
+    <Reveal y={16} className={`flex items-center gap-2.5 text-[13px] font-bold uppercase tracking-[0.16em] ${className}`}>
       <Flower />
       <span>{children}</span>
-    </div>
+    </Reveal>
   );
 }
 
@@ -57,9 +58,11 @@ export function SectionTitle({
   className?: string;
 }) {
   return (
-    <h2 className={`m-0 font-serif font-black uppercase leading-none ${size} ${className}`}>
-      {children}
-    </h2>
+    <Reveal delay={0.1}>
+      <h2 className={`m-0 font-serif font-black uppercase leading-none ${size} ${className}`}>
+        {children}
+      </h2>
+    </Reveal>
   );
 }
 
@@ -94,21 +97,27 @@ const r = (n: number) => Math.round(n * 10) / 10;
 
 const DRAW_S = 1.4; // ako dlho sa kreslí stonka so slučkou
 const LEAF_GAP_S = 0.12; // rozostup medzi lístkami
+const LEAF_S = 0.55; // ako dlho rastie jeden lístok
+/** Za koľko sekúnd od začiatku je vetvička celá hotová (stonka aj lístky). */
+export const BRANCH_TOTAL_S = DRAW_S * 0.85 + (LEAVES.length - 1) * LEAF_GAP_S + LEAF_S;
 
 /**
  * Kreslená vetvička s lístkami a závitom na konci (motív z loga).
  * Najprv sa zdola nahor nakreslí stonka so slučkou (jedna čiara),
  * potom od slučky smerom dole postupne vyrastú lístky – každý zo svojej stopky.
+ * S `reverse` sa stonka kreslí opačne – od slučky k stopke – a lístky rastú v rovnakom smere.
  */
 export function Branch({
   className = "",
   color = "#B8191B",
   delay = 0.2,
+  reverse = false,
   style,
 }: {
   className?: string;
   color?: string;
   delay?: number;
+  reverse?: boolean;
   style?: CSSProperties;
 }) {
   const [p0, p1, p2, p3] = STEM;
@@ -121,7 +130,7 @@ export function Branch({
         stroke={color}
         strokeWidth={4}
         strokeLinecap="round"
-        style={{ animationDelay: `${delay}s`, animationDuration: `${DRAW_S}s` }}
+        style={{ animationDelay: `${delay}s`, animationDuration: `${DRAW_S}s`, strokeDashoffset: reverse ? -1 : undefined }}
         d={`M${p0} C${p1} ${p2} ${p3} C160 55 176 44 176 28 C176 14 162 8 153 15 C145 21 149 33 158 31 C163 30 164 23 159 22`}
       />
       <g fill={color}>

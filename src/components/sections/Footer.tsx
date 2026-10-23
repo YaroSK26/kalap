@@ -1,10 +1,12 @@
+import Link from "next/link";
 import { Icon } from "../ui";
-import { menuItems, socials } from "@/lib/data";
+import { legalPages, menuItems, socials } from "@/lib/data";
 
-const colTitle = "mb-2 text-xs font-bold uppercase tracking-[0.16em] text-red-soft";
-const link = "py-1.5 text-[15px] text-white/85 no-underline hover:text-red-soft";
+const colTitle = "mb-2 text-xs font-bold uppercase tracking-[0.16em] text-red";
+const link = "py-1.5 text-[15px] text-white/85 no-underline hover:text-red";
 
-export default function Footer() {
+/** `base` = "/" na podstránkach, aby odkazy na sekcie viedli späť na úvodnú stránku. */
+export default function Footer({ base = "" }: { base?: string }) {
   return (
     <footer className="bg-ink text-white">
       <div className="mx-auto flex max-w-7xl justify-center px-[clamp(16px,4vw,48px)] pt-10">
@@ -13,7 +15,6 @@ export default function Footer() {
 
       <div className="mx-auto grid max-w-7xl grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-10 px-[clamp(16px,4vw,48px)] pt-12 pb-8">
         <div className="flex flex-col gap-4">
-          <img src="/img/logo.png" alt="KALAP" className="h-auto w-28" />
           <p className="m-0 max-w-[280px] text-[15px] leading-[1.6] text-white/85">
             Štyria chalani z Košíc, ktorí hrajú ľudovku na svadbách, plesoch, oslavách a festivaloch.
           </p>
@@ -22,7 +23,7 @@ export default function Footer() {
         <nav aria-label="Pätička - sekcie" className="flex flex-col gap-1">
           <span className={colTitle}>Navigácia</span>
           {menuItems.map((m) => (
-            <a key={m.href} href={m.href} className={link}>
+            <a key={m.href} href={base + m.href} className={link}>
               {m.label}
             </a>
           ))}
@@ -40,9 +41,11 @@ export default function Footer() {
 
         <div className="flex flex-col gap-1">
           <span className={colTitle}>Právne informácie</span>
-          <a href="#" className={link}>Ochrana osobných údajov (GDPR)</a>
-          <a href="#" className={link}>Zásady používania cookies</a>
-          <a href="#" className={link}>Obchodné podmienky</a>
+          {legalPages.map((l) => (
+            <Link key={l.href} href={l.href} className={link}>
+              {l.label}
+            </Link>
+          ))}
         </div>
       </div>
 
@@ -54,7 +57,7 @@ export default function Footer() {
             href="https://www.jaroslavbarabas.sk/"
             target="_blank"
             rel="noopener"
-            className="font-semibold text-red-soft underline decoration-2 underline-offset-4 hover:text-white"
+            className="font-semibold text-red underline decoration-2 underline-offset-4 hover:text-white"
           >
             Jaroslav Barabáš
           </a>

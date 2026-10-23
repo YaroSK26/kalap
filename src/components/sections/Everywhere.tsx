@@ -51,7 +51,7 @@ export default function Everywhere() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="sme-vsade" aria-label="Sme všade" className="relative h-[360vh] bg-ink text-white">
+    <section ref={sectionRef} id="sme-vsade" aria-label="Sme všade" className="relative h-[300vh] bg-ink text-white">
       <div className="sticky top-0 h-svh overflow-hidden">
         {floatingPhotos.map((p, i) => (
           <div
@@ -75,7 +75,7 @@ export default function Everywhere() {
           <p className="m-0 max-w-[560px] text-[clamp(17px,1.6vw,21px)] leading-[1.55] text-white/86 [text-shadow:0_2px_18px_rgba(0,0,0,0.8)]">
             Svadby, plesy, oslavy aj dedinské pódiá.
             <br />
-            <span className="font-semibold text-red-soft">Hráme všade, kam nás zavoláte.</span>
+            <span className="font-semibold text-red">Hráme všade, kam nás zavoláte.</span>
           </p>
         </div>
       </div>

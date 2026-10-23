@@ -4,7 +4,6 @@
   --color-ink: #0a0a0a;
   --color-red: #b8191b;
   --color-red-dark: #8f1214;
-  --color-red-soft: #e8686a;
   --color-cream: #f6f3ef;
   --color-body: #4a4a4a;
   --color-muted: #6b6b6b;
@@ -95,15 +94,39 @@
 }
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
-  }
   body {
     @apply bg-white font-sans text-ink;
   }
   a {
     @apply text-ink transition-colors hover:text-red;
   }
+  /* Viditeľný fokus pri ovládaní klávesnicou. */
+  :focus-visible {
+    outline: 3px solid var(--color-red);
+    outline-offset: 3px;
+  }
+  .bg-red :focus-visible,
+  .bg-red:focus-visible {
+    outline-color: #ffffff;
+  }
+}
+
+/* Animácie v <InView> čakajú, kým príde obsah do obrazovky. */
+.k-wait:not(.is-in),
+.k-wait:not(.is-in) * {
+  animation-play-state: paused !important;
+}
+
+/* Text právnych stránok. */
+.k-legal h2 {
+  @apply mt-6 mb-0 font-serif text-[clamp(20px,2.4vw,26px)] font-black text-ink;
+}
+.k-legal p,
+.k-legal ul {
+  @apply m-0;
+}
+.k-legal ul {
+  @apply list-disc pl-6;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -113,7 +136,7 @@
   }
   .k-draw .k-line,
   .k-underline path {
-    stroke-dashoffset: 0;
+    stroke-dashoffset: 0 !important;
   }
   .k-draw .k-leaf {
     transform: none;
