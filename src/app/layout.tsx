@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Merriweather } from "next/font/google";
 import SmoothScroll from "@/components/SmoothScroll";
+import Loader from "@/components/Loader";
 import "./globals.css";
 
 const inter = Inter({
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="sk" className={`${inter.variable} ${merriweather.variable} h-full antialiased`}>
+    <html lang="sk" className={`${inter.variable} ${merriweather.variable} h-full antialiased k-loading`}>
       <body className="min-h-full">
         <a
           href="#obsah"
@@ -37,7 +38,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Preskočiť na obsah
         </a>
+        {/* Bez JavaScriptu by loader nikdy nezmizol. */}
+        <noscript>
+          <style>{`html.k-loading{overflow:auto}.k-loader{display:none}`}</style>
+        </noscript>
         <SmoothScroll />
+        <Loader />
         {children}
       </body>
     </html>

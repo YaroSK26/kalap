@@ -13,14 +13,14 @@ export default function Footer({ base = "" }: { base?: string }) {
         <img src="/svg/divider.svg" alt="" aria-hidden="true" className="w-[clamp(200px,26vw,320px)]" />
       </div>
 
-      <div className="mx-auto grid max-w-7xl grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-10 px-[clamp(16px,4vw,48px)] pt-12 pb-8">
-        <div className="flex flex-col gap-4">
+      <div className="mx-auto grid max-w-7xl grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-10 px-[clamp(16px,4vw,48px)] pt-12 pb-8 max-sm:text-center">
+        <div className="flex flex-col gap-4 max-sm:items-center">
           <p className="m-0 max-w-[280px] text-[15px] leading-[1.6] text-white/85">
             Štyria chalani z Košíc, ktorí hrajú ľudovku na svadbách, plesoch, oslavách a festivaloch.
           </p>
         </div>
 
-        <nav aria-label="Pätička - sekcie" className="flex flex-col gap-1">
+        <nav aria-label="Pätička - sekcie" className="flex flex-col gap-1 max-sm:items-center">
           <span className={colTitle}>Navigácia</span>
           {menuItems.map((m) => (
             <a key={m.href} href={base + m.href} className={link}>
@@ -29,7 +29,7 @@ export default function Footer({ base = "" }: { base?: string }) {
           ))}
         </nav>
 
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 max-sm:items-center">
           <span className={colTitle}>Sledujte nás</span>
           {socials.map((s) => (
             <a key={s.label} href={s.href} target="_blank" rel="noopener" className={`flex items-center gap-2.5 ${link}`}>
@@ -39,7 +39,7 @@ export default function Footer({ base = "" }: { base?: string }) {
           ))}
         </div>
 
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 max-sm:items-center">
           <span className={colTitle}>Právne informácie</span>
           {legalPages.map((l) => (
             <Link key={l.href} href={l.href} className={link}>
@@ -49,7 +49,7 @@ export default function Footer({ base = "" }: { base?: string }) {
         </div>
       </div>
 
-      <div className="mx-auto flex max-w-7xl flex-wrap justify-between gap-3 border-t border-white/10 px-[clamp(16px,4vw,48px)] pt-5 pb-8 text-[13px] text-white/85">
+      <div className="mx-auto flex max-w-7xl flex-wrap justify-between gap-3 max-sm:flex-col max-sm:items-center max-sm:text-center border-t border-white/10 px-[clamp(16px,4vw,48px)] pt-5 pb-8 text-[13px] text-white/85">
         <span>© 2026 KALAP. Všetky práva vyhradené.</span>
         <span>
           Web vytvoril{" "}

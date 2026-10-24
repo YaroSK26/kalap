@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { PHONE, PHONE_HREF } from "@/lib/data";
 
-/** Veľké číslo s ručne kresleným podčiarknutím - nakreslí sa pri zobrazení a znova pri hover. */
+/** Veľké číslo s ručne kresleným podčiarknutím - nakreslí sa raz, keď číslo príde do obrazovky. */
 export default function PhoneLink() {
   const ref = useRef<HTMLAnchorElement>(null);
   const [inView, setInView] = useState(false);
@@ -28,7 +28,7 @@ export default function PhoneLink() {
     <a
       ref={ref}
       href={PHONE_HREF}
-      className="group relative inline-block whitespace-nowrap pb-[0.18em] font-serif text-[clamp(44px,10vw,156px)] font-black leading-none text-white no-underline transition-transform duration-400 ease-out-soft hover:-translate-y-1 hover:text-white"
+      className="relative inline-block whitespace-nowrap pb-[0.18em] font-serif text-[clamp(44px,10vw,156px)] font-black leading-none text-white no-underline hover:text-white"
     >
       {PHONE}
       <svg

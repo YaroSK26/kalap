@@ -28,12 +28,21 @@ export default function Instagram() {
     setMuted(!muted);
   };
 
-  // Video sa spustí samo, iba ak používateľ nechce menej pohybu.
+  // Video sa spustí samo, až keď príde do obrazovky, a mimo nej sa zastaví.
+  // Kto chce menej pohybu, spustí si ho sám.
   useEffect(() => {
     const el = videoRef.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    el.play().catch(() => {});
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) el.play().catch(() => {});
+        else el.pause();
+      },
+      { threshold: 0.5 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
   return (

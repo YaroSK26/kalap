@@ -21,6 +21,8 @@
   --animate-k-float: k-float 8s ease-in-out infinite;
   --animate-k-pulse: k-pulse 2.4s ease-out infinite;
   --animate-k-scroll: k-scroll 1.8s ease-in-out infinite;
+  --animate-k-loader-in: k-loader-in 0.9s var(--ease-out-soft) both;
+  --animate-k-loader-bar: k-loader-bar 1.2s var(--ease-panel) both;
 
   @keyframes k-in {
     from { opacity: 0; transform: translateY(28px); }
@@ -50,6 +52,14 @@
     0% { transform: translateY(-100%); }
     100% { transform: translateY(200%); }
   }
+  @keyframes k-loader-in {
+    from { opacity: 0; transform: scale(0.85) translateY(12px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes k-loader-bar {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
   @keyframes k-draw {
     to { stroke-dashoffset: 0; }
   }
@@ -74,7 +84,7 @@
   to { transform: scale(1); }
 }
 
-/* Podčiarknutie telefónu: nakreslí sa pri zobrazení, pri hover sa nakreslí znova */
+/* Podčiarknutie telefónu: nakreslí sa raz, keď príde do obrazovky (bez hover - na mobile by sa spúšťalo stále znova) */
 @utility k-underline {
   & path {
     stroke-dasharray: 1;
@@ -83,14 +93,6 @@
   &.is-in path {
     animation: k-draw 1.1s cubic-bezier(0.6, 0, 0.2, 1) 0.15s forwards;
   }
-  .group:hover &.is-in path {
-    animation: k-redraw 0.8s cubic-bezier(0.6, 0, 0.2, 1) forwards;
-  }
-}
-
-@keyframes k-redraw {
-  from { stroke-dashoffset: 1; }
-  to { stroke-dashoffset: 0; }
 }
 
 @layer base {
@@ -114,6 +116,14 @@
 /* Animácie v <InView> čakajú, kým príde obsah do obrazovky. */
 .k-wait:not(.is-in),
 .k-wait:not(.is-in) * {
+  animation-play-state: paused !important;
+}
+
+/* Kým beží loader, animácie stránky stoja a čakajú na ňu. */
+html.k-loading {
+  overflow: hidden;
+}
+html.k-loading body > :not(.k-loader) * {
   animation-play-state: paused !important;
 }
 

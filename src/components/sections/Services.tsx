@@ -43,7 +43,7 @@ export default function Services() {
             <p className="m-0 font-serif text-[clamp(26px,3.4vw,44px)] font-black uppercase leading-[1.15]">
               Chcete nás na svojej akcii?
             </p>
-            <p className="m-0 text-lg opacity-90">Objednávky vybavujeme výhradne telefonicky.</p>
+            <p className="m-0 text-lg opacity-90">Objednávky vybavujeme telefonicky.</p>
           </div>
           <a
             href={PHONE_HREF}

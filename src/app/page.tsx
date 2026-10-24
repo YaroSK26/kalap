@@ -17,8 +17,8 @@ export default function Home() {
         <Hero />
         <About />
         <Services />
-        <Everywhere />
         <Video />
+        <Everywhere />
         <Merch />
         <Instagram />
         <Contact />
